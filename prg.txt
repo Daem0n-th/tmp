@@ -1,0 +1,256 @@
+//prg4 
+package prg4;
+import java.util.Scanner;
+
+class LessBalanceException extends Exception{
+	String s1;
+	LessBalanceException(String s2){
+		s1=s2;
+	}
+	public String toString() {
+		return("LessBalanceException="+s1);
+	}
+}
+class TransactionNotAllowed extends Exception{
+	String s1;
+	TransactionNotAllowed(String s2){
+		s1=s2;
+	}
+	public String toString() {
+		return("TransactionNotAllowed= "+s1);
+	}
+}
+class AxisBank{
+	String name, address,phone,pan,aadhar;
+	double balance,amt;
+	public AxisBank(String name, String address, String phone, String pan,String aadhar,
+			double balance) {
+		this.name=name;
+		this.aadhar=aadhar;
+		this.phone=phone;
+		this.pan=pan;
+		this.address=address;
+		this.balance=balance;
+	}
+	void depositAmount(double amt) {
+		balance+=amt;
+	}
+	void withdrawAmount(double amt) {
+		try {
+			if(amt>4500) {
+				throw new TransactionNotAllowed("Exceeds per day limit i.e 4500");
+			}
+			if(balance-amt<1000) {
+				throw new LessBalanceException("Cant withdraw this much amount  due to "
+						+ "insufficient balance, minimum 100 has to be maintained");
+			}else {
+				balance-=amt;
+			}
+		}catch(LessBalanceException e) {
+			System.out.println(e);
+		}
+		catch(TransactionNotAllowed e) {
+			System.out.println(e);
+		}
+	}
+	public void display() {
+		System.out.println("Name: "+name+"\nAddress: "+address+"\nPhone: "+phone+"\nPan: "+pan+"\nAadhar: "+aadhar);
+		System.out.println("Available Balance in the account is "+balance);
+	}
+}
+public class prg4 {
+	public static void main(String args[]) {
+		Scanner scan = new Scanner(System.in);
+		int choice =0;
+		double amt=0;
+		AxisBank ab = new AxisBank("Mohan","Bangalore","9898979743","ADF4E5R","5084 2901 1000",5600.00);
+		ab.display();
+		do {
+			System.out.println("1.Deposit\n2.Withdraw\n3.Exit");
+			choice = scan.nextInt();
+			switch(choice) {
+			case 1:
+				System.out.println("Enter amount to be deposited: ");
+				amt= scan.nextDouble();
+				ab.depositAmount(amt);
+				ab.display();
+				break;
+			case 2:
+				System.out.println("Enter the amount to withdraw: ");
+				amt=scan.nextDouble();
+				ab.withdrawAmount(amt);
+				ab.display();
+				break;
+			default:
+				System.out.println("Enter a valid choice!");
+			}
+		}while(choice!=3);
+		scan.close();
+	}
+}
+
+//prg3
+package prg3;
+
+interface TravelPlan{
+	public void chennai_to_hyd(String mode, double fare);
+	public void hyd_to_indore(String mode, double fare);
+	public void indore_to_delhi(String mode, double fare);
+}
+
+class TravelAgent implements TravelPlan
+{
+	double totalfare=0;
+	public void chennai_to_hyd(String mode,double fare)
+	{
+		System.out.println("Travel Chennai to Hyderabad by "+mode+". Travel fare is"+fare);
+		totalfare+=fare;
+	}
+	public void hyd_to_indore(String mode,double fare)
+	{
+		System.out.println("Travel Hyderabad to Indore by "+mode+". Travel fare is"+fare);
+		totalfare+=fare;
+	}
+	public void indore_to_delhi(String mode,double fare)
+	{
+		System.out.println("Travel Indore to Delhi by "+mode+". Travel fare is "+fare);
+		totalfare+=fare;
+	}
+}
+
+public class prg3 {
+	public static void main(String args[])
+	{
+		TravelAgent t1 = new TravelAgent();
+		t1.chennai_to_hyd("Plane", 4000.0);
+		t1.hyd_to_indore("Bus", 850.0);
+		t1.indore_to_delhi("Train", 950.0);
+		System.out.println("Total Fare is: "+t1.totalfare);
+	}
+
+}
+
+//prg2
+package prg2;
+
+abstract class vehicle
+{
+	String Fuel;
+	public vehicle(String fuel)
+	{
+		this.Fuel=fuel;
+	}
+	public void fuelstatus(String vehicle)
+	{
+		System.out.println("This "+vehicle+" fuel tank "+Fuel);
+	}
+	abstract void topspeed();
+}
+
+class Car extends vehicle{
+	int speed;
+	public Car(String fuel,int carspeed) {
+		super(fuel);
+		speed=carspeed;
+	}
+	void topspeed()
+	{
+		System.out.println("Car runs at "+speed+" km/hr top speed");
+	}
+}
+class Bike extends vehicle{
+	int speed;
+	public Bike(String fuel,int bikespeed) {
+		super(fuel);
+		speed=bikespeed;
+	}
+	void topspeed()
+	{
+		System.out.println("Bike runs at "+speed+" km/hr top speed");
+	}
+}
+
+public class prg2 {
+	public static void main(String args[])
+	{
+		Car c1 = new Car("Full",150);
+		c1.fuelstatus("Car");
+		c1.topspeed();
+		Bike b1 = new Bike("Half",100);
+		b1.fuelstatus("Bike");
+		b1.topspeed();
+	}
+}
+
+//prg1
+class Bank{
+	String name,address,phone,pan,aadhar;
+	Bank()
+	{}
+	Bank(String name,String address,String phone,String pan,String aadhar)
+	{
+		this.name=name;
+		this.address=address;
+		this.phone=phone;
+		this.pan=pan;
+		this.aadhar=aadhar;
+	}
+	void calint()
+	{  
+	}
+	void display(){
+		System.out.println("Name: "+name+"\nAddress: "+address+"\nPhone: "+phone+"\nPan: "+pan+"\nAadhar"+aadhar);
+		
+	}
+}
+class Sbacc extends Bank{
+	String accno;
+	double accbal,interest;
+	Sbacc(String name,String address,String phone,String pan,String aadhar,String no,double bal)
+	{
+		super(name,address,phone,pan,aadhar);
+		accno=no;
+		accbal=bal;
+	}
+	void calint()
+	{
+		interest=accbal*0.04;
+	}
+	void display()
+	{
+		super.display();
+		System.out.println("Account No: "+accno+"\nBalance: "+accbal);
+	}
+}
+class Loanacc extends Bank{
+	String accno;
+	double loanamt,interest;
+	Loanacc(String name,String address,String phone,String pan,String aadhar,String no,double bal)
+	{
+		super(name,address,phone,pan,aadhar);
+		accno=no;
+		loanamt=bal;
+	}
+	void calint()
+	{
+		interest=loanamt*0.4;
+	}
+	void display()
+	{
+		super.display();
+		System.out.println("Account No: "+accno+"\nInterest Due: "+interest);
+	}
+}
+public class p1{
+	public static void main(String args[])
+	{
+		Bank bankacc= new Bank();
+		bankacc= new Sbacc("Arun","Bangalore","123456","AND9Q6P","3434567890","3849",5000.0);
+		bankacc.calint();
+		bankacc.display();
+		bankacc=new Loanacc("Melwin","Bangalore","234567","FDP5R8E","506985632","3489",200000.0);
+		bankacc.calint();
+		bankacc.display();
+	}
+}
+
